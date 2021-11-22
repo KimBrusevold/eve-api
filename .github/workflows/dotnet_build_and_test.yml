@@ -18,7 +18,7 @@ jobs:
       with:
         dotnet-version: 5.0.x
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore ./EVE.Api
     - name: Build
       run: dotnet build ./EVE.Api -c release --no-restore
     - name: Test
