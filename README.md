@@ -2,6 +2,6 @@
 
 Use Official EVE Online - Rest Api to do something
 
-Web API project -> EVE.Api
+Library Project -> EVE.Api
 
 Some point there may be a website project in as well
