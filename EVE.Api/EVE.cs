@@ -12,21 +12,21 @@ namespace EVE.Api
 {
     public class EVE
     {
-        private JsonSerializerOptions jsonOptions { get; init; }
+        private JsonSerializerOptions JsonOptions { get; init; }
         private HttpClient Client { get; init; }
 
         public EVE(JsonSerializerOptions jsonOptions)
         : base()
         {
-            this.jsonOptions = jsonOptions;
+            this.JsonOptions = jsonOptions;
         }
 
         public EVE()
         {
             // Create object of JsonSerializer to ignore Upper Case
-            jsonOptions = new JsonSerializerOptions();
-            jsonOptions.PropertyNameCaseInsensitive = true;
-            jsonOptions.WriteIndented = true;
+            JsonOptions = new JsonSerializerOptions();
+            JsonOptions.PropertyNameCaseInsensitive = true;
+            JsonOptions.WriteIndented = true;
 
             string cheatToken = "eyJhbGciOiJSUzI1NiIsImtpZCI6IkpXVC1TaWduYXR1cmUtS2V5IiwidHlwIjoiSldUIn0.eyJzY3AiOiJlc2ktbWFpbC5yZWFkX21haWwudjEiLCJqdGkiOiI2OTA2MTczNS02Mjc2LTRjZTgtOTFhMi0xNzk5YjE5MmIxNmIiLCJraWQiOiJKV1QtU2lnbmF0dXJlLUtleSIsInN1YiI6IkNIQVJBQ1RFUjpFVkU6MjExNDUxMzMwMSIsImF6cCI6IjY4MzA4NGFiNWY4ODQ4ZDRiMTg3NDYyYWMzYjk3Njc3IiwidGVuYW50IjoidHJhbnF1aWxpdHkiLCJ0aWVyIjoibGl2ZSIsInJlZ2lvbiI6IndvcmxkIiwibmFtZSI6IlBqb3RyIE1ha2FuZW4iLCJvd25lciI6Ii9oUnBsem1aNGJJQTdwcndDWWIwWGR1VzhIST0iLCJleHAiOjE2MzcwMDY2MjMsImlhdCI6MTYzNzAwNTQyMywiaXNzIjoibG9naW4uZXZlb25saW5lLmNvbSJ9.HSCMInMHVj4ZNshwkBR7nC4_FbqdLIFPW4S3HW5Td-qN6i9zOvRbemIoGdzrNyGLylETs5pT9B-jk_cUy0fdZgmJ37A6MQxTQ-2LS9IybCqw0PO90zeE8Gtm-BLrMm0T6brZHF99hEpcLFGSwxbw_yJj-8C0caaNLjQ-FuiWhbvNnVqslARla7rEOq69vJQJSunuj128H5UEjlL37THP8WWP_PYzQgseMUZqrfdFMYW6lqPt9CnJty-51fBIwd7dd3dOXxnBl4VI5ohlNVwmzRIGIfiQLYdZb3czHCZjxIhyh8zEN4olT63WycklctNxd2pgeYCzNsPR4UIQscigCA";
 
@@ -61,7 +61,7 @@ namespace EVE.Api
 
             // Get the stream from HttpRespone to deserialize as Object CharacterCore
 
-            return await JsonSerializer.DeserializeAsync<CharacterCore>(contentAsStream, jsonOptions);
+            return await JsonSerializer.DeserializeAsync<CharacterCore>(contentAsStream, JsonOptions);
 
         }
         public string ReadLocalSettings(string key)
