@@ -18,12 +18,16 @@ Some point there may be a website project in as well
  * Show character's jump-clones
  * Gather and show character's assets in the game, display character's total value
  * Generate a GUI for displaying
+ * Character's skill plan, show and edit skill queue
+ * Alert the "user" when skill queue is about to run out
 
 ## Economy
 
  * Gather a collection of materials to a list
  * Ability to choose "Region"/"System"
  * Show the average price of materials in the chosen Region/System
+ * Ability to compare prices between "selected" Regions/Systems
+ * Price graphs over time, collect data to a Database for data analysis
 
 ## Trade routes
 
