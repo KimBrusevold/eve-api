@@ -17,7 +17,6 @@ Some point there may be a website project in as well
  * Show character's "Current Location" in the game
  * Show character's jump-clones
  * Gather and show character's assets in the game, display character's total value
- * Generate a GUI for displaying
  * Character's skill plan, show and edit skill queue
  * Alert the "user" when skill queue is about to run out
 
@@ -37,5 +36,5 @@ Some point there may be a website project in as well
 ## Future
 
 * Generate a "bait-protection". Expensive materials/components in a low-security system is most likely bait, and should be avoided
-
- * High risk/High reward trade routes.
+* High risk/High reward trade routes.
+* Generate a GUI for displaying
