@@ -27,6 +27,7 @@ namespace EVE.Api
         public float SecurityStatus { get; set; }
         public string Title { get; set; }
 
+
     }
-    
+
 }

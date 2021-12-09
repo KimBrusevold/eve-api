@@ -14,15 +14,21 @@ var eve = new EVE.Api.EVE();
 string characterId = eve.ReadLocalSettings("CharacterID");
 var character = await eve.CharacterAsync(characterId);
 var characterB = await eve.CharacterAsync("325379244");
-//var characterMail = character.Mail();
+
+
+//var characterMail = character.GetMail();
+var mailRes = eve.GetCharacterMail(characterId);
+
 
 
 var options = new JsonSerializerOptions();
 options.PropertyNameCaseInsensitive = true;
 options.WriteIndented = true;
 
+
 Console.WriteLine(JsonSerializer.Serialize(character, options));
 Console.WriteLine(JsonSerializer.Serialize(characterB, options));
+Console.WriteLine(JsonSerializer.Serialize(mailRes, options));
 
 //static GetCharacterMail ()
 //{

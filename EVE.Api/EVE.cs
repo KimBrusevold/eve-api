@@ -15,23 +15,18 @@ namespace EVE.Api
         private JsonSerializerOptions JsonOptions { get; init; }
         private HttpClient Client { get; init; }
 
-        public EVE(JsonSerializerOptions jsonOptions)
-        : base()
-        {
-            this.JsonOptions = jsonOptions;
-        }
-
         public EVE()
         {
             // Create object of JsonSerializer to ignore Upper Case
-            JsonOptions = new JsonSerializerOptions();
-            JsonOptions.PropertyNameCaseInsensitive = true;
-            JsonOptions.WriteIndented = true;
+            this.JsonOptions = new JsonSerializerOptions();
+            this.JsonOptions.PropertyNameCaseInsensitive = true;
+            this.JsonOptions.WriteIndented = true;
 
-            string cheatToken = "eyJhbGciOiJSUzI1NiIsImtpZCI6IkpXVC1TaWduYXR1cmUtS2V5IiwidHlwIjoiSldUIn0.eyJzY3AiOiJlc2ktbWFpbC5yZWFkX21haWwudjEiLCJqdGkiOiI2OTA2MTczNS02Mjc2LTRjZTgtOTFhMi0xNzk5YjE5MmIxNmIiLCJraWQiOiJKV1QtU2lnbmF0dXJlLUtleSIsInN1YiI6IkNIQVJBQ1RFUjpFVkU6MjExNDUxMzMwMSIsImF6cCI6IjY4MzA4NGFiNWY4ODQ4ZDRiMTg3NDYyYWMzYjk3Njc3IiwidGVuYW50IjoidHJhbnF1aWxpdHkiLCJ0aWVyIjoibGl2ZSIsInJlZ2lvbiI6IndvcmxkIiwibmFtZSI6IlBqb3RyIE1ha2FuZW4iLCJvd25lciI6Ii9oUnBsem1aNGJJQTdwcndDWWIwWGR1VzhIST0iLCJleHAiOjE2MzcwMDY2MjMsImlhdCI6MTYzNzAwNTQyMywiaXNzIjoibG9naW4uZXZlb25saW5lLmNvbSJ9.HSCMInMHVj4ZNshwkBR7nC4_FbqdLIFPW4S3HW5Td-qN6i9zOvRbemIoGdzrNyGLylETs5pT9B-jk_cUy0fdZgmJ37A6MQxTQ-2LS9IybCqw0PO90zeE8Gtm-BLrMm0T6brZHF99hEpcLFGSwxbw_yJj-8C0caaNLjQ-FuiWhbvNnVqslARla7rEOq69vJQJSunuj128H5UEjlL37THP8WWP_PYzQgseMUZqrfdFMYW6lqPt9CnJty-51fBIwd7dd3dOXxnBl4VI5ohlNVwmzRIGIfiQLYdZb3czHCZjxIhyh8zEN4olT63WycklctNxd2pgeYCzNsPR4UIQscigCA";
-            var type = "mail";
+            string cheatToken = null;
+            string clientId = ReadLocalSettings("ClientID");
+            string secretKey = ReadLocalSettings("SecretKey");
 
-            Client = new HttpClient() // This will be entry for http calls. Will need to create a wrapper at some point
+            this.Client = new HttpClient() // This will be entry for http calls. Will need to create a wrapper at some point
             {
                 BaseAddress = new Uri("https://esi.evetech.net/latest/")
             };
@@ -42,33 +37,12 @@ namespace EVE.Api
 
         public async Task<CharacterCore> CharacterAsync(string characterId)
         {
-            string clientId = ReadLocalSettings("ClientID");
-            string secretKey = ReadLocalSettings("SecretKey");
+            var url = $"characters/{characterId}/?datasource=tranquility";
 
-            var type = "mail";
-
-            
-
-            HttpResponseMessage res = await Client.GetAsync($"characters/{characterId}/?datasource=tranquility");
-            HttpResponseMessage resMail = await Client.GetAsync($"characters/{characterId}/{type}/?datasource=tranquility");
-
-            if (!res.IsSuccessStatusCode)
-            {
-                throw new Exception($"No HTTP Response retrieved with error {res.StatusCode}");
-            }
-            
-            var contentAsStream = await res.Content.ReadAsStreamAsync();
-
-            // Create object of JsonSerializer to ignore Upper Case
-            var options = new JsonSerializerOptions();
-            options.PropertyNameCaseInsensitive = true;
-            options.WriteIndented = true;
-            // Get the stream from HttpRespone to deserialize as Object CharacterCore
-            var ContactInfo = await JsonSerializer.DeserializeAsync<CharacterCore>(contentAsStream, options);
-
-            return await JsonSerializer.DeserializeAsync<CharacterCore>(contentAsStream, JsonOptions);
-
+            return await GetHttpResponseAsync<CharacterCore>(url);
         }
+
+        // Move function to static class called "Tools" etc.
         public string ReadLocalSettings(string key)
         {
             using var sr = new StreamReader("local.settings.json");
@@ -78,5 +52,40 @@ namespace EVE.Api
 
             return res[key].ToString();
         }
+
+        public async Task<List<Mail>> GetCharacterMail(string characterId) 
+        {
+
+            var url = $"characters/{characterId}/mail/?datasource=tranquility";
+            var mailResp = await GetHttpResponseAsync<List<Mail>>(url);
+
+            return mailResp;
+        }
+
+        public async Task<T> GetHttpResponseAsync<T>(string url)
+        {
+            HttpResponseMessage res = await Client.GetAsync(url);
+
+            if (!res.IsSuccessStatusCode)
+            {
+                throw new Exception($"No HTTP Response retrieved with error {res.StatusCode}");
+            }
+            var contentAsStream = await res.Content.ReadAsStreamAsync();
+
+            return await JsonSerializer.DeserializeAsync<T>(contentAsStream, JsonOptions);
+        }
+        public async Task<T> PostHttp<T>(string url)
+        {
+            HttpResponseMessage res = await Client.GetAsync(url);
+
+            if (!res.IsSuccessStatusCode)
+            {
+                throw new Exception($"No HTTP Response retrieved with error {res.StatusCode}");
+            }
+            var contentAsStream = await res.Content.ReadAsStreamAsync();
+
+            return await JsonSerializer.DeserializeAsync<T>(contentAsStream, JsonOptions);
+        }
+
     }
 }
